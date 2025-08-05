@@ -161,7 +161,7 @@ erDiagram
 
 ### 📍 Phase 2: Pool Initialization
 
-**File Detail**: `learning-02-initialize.md`
+**File Detail**: [`learning-02-initialize.md`](./docs/learning-02-initialize.md)
 
 - [ ] **2.1** Create PDA untuk config account
 - [ ] **2.2** Setup LP mint dengan proper authority
@@ -170,7 +170,7 @@ erDiagram
 
 ### 📍 Phase 3: Liquidity Management
 
-**File Detail**: `learning-03-liquidity.md`
+**File Detail**: [`learning-03-liquidity.md`](./docs/learning-03-liquidity.md)
 
 - [ ] **3.1** Implement deposit liquidity
 - [ ] **3.2** Calculate LP token amounts
