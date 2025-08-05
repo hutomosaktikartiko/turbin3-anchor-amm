@@ -152,7 +152,7 @@ erDiagram
 
 ### 📍 Phase 1: Foundation Setup
 
-**File Detail**: [`learning-01-foundation.md`](./learning-01-foundation.md)
+**File Detail**: [`learning-01-foundation.md`](./docs/learning-01-foundation.md)
 
 - [ ] **1.1** Setup project structure & dependencies
 - [ ] **1.2** Define constants dan seeds

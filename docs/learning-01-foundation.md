@@ -157,7 +157,7 @@ anchor build
 solana-test-validator
 
 # Verify connection (another terminal)
-solana cluster-info
+solana cluster-date
 ```
 
 ---
@@ -342,7 +342,7 @@ State management adalah core dari AMM system.
 
 **Step 4.1: Create State File**
 
-Buat file `programs/amm/src/state/mod.rs`:
+Buat file `programs/amm/src/state/config.rs`:
 
 ```rust
 use anchor_lang::prelude::*;
