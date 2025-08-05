@@ -24,12 +24,12 @@ Mari kita buat instruction context untuk pool initialization.
 Edit file `programs/amm/src/instructions/initialize.rs`:
 
 ```rust
+use crate::{constants::*, error::AmmError, state::Config};
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{Mint, Token, TokenAccount},
 };
-use crate::{constants::*, error::AmmError, state::Config};
 
 #[derive(Accounts)]
 #[instruction(seed: u64, fee: u16)]
@@ -42,7 +42,7 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = authority,
-        space = Config::INIT_SPACE,
+        space = 8 + Config::INIT_SPACE,
         seeds = [CONFIG_SEED.as_bytes(), seed.to_le_bytes().as_ref()],
         bump
     )]
