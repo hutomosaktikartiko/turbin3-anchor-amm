@@ -294,4 +294,248 @@ describe("AMM Liquidity Management", () => {
         expect(lpReceived).to.be.greaterThan(0);
         console.log("Additional LP tokens received:", lpReceived);
     });
+
+    it("Successfull withdraws liquidity", async () => {
+        // first deposit liquidity
+        const amountX = new anchor.BN(100000000);
+        const amountY = new anchor.BN(200000000);
+        const minLp = new anchor.BN(1);
+
+        const userXAccount = await getOrCreateAssociatedTokenAccount(
+            provider.connection,
+            user,
+            mintX,
+            user.publicKey,
+        );
+
+        const userYAccount = await getOrCreateAssociatedTokenAccount(
+            provider.connection,
+            user,
+            mintY,
+            user.publicKey,
+        );
+
+        const userLpAccount = await getOrCreateAssociatedTokenAccount(
+            provider.connection,
+            user,
+            lpMintPda,
+            user.publicKey,
+        );
+
+        await program.methods
+            .deposit(amountX, amountY, minLp)
+            .accounts({
+                user: user.publicKey,
+                config: configPda,
+                mintX: mintX,
+                mintY: mintY,
+                lpMint: lpMintPda, 
+                userX: userXAccount.address,
+                userY: userYAccount.address,
+                userLp: userLpAccount.address,
+                vaultX: vaultXPda,
+                vaultY: vaultYPda,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+                systemProgram: SystemProgram.programId,
+            })
+            .signers([user])
+            .rpc();
+
+        // get LP balance
+        const lpBalance = await getAccount(
+            provider.connection,
+            userLpAccount.address,
+        );
+        const lpToWithdraw = new anchor.BN(Number(lpBalance.amount) / 2); // half of balance
+
+        // get balances before withdrawal
+        const userXBefore = await getAccount(
+            provider.connection,
+            userXAccount.address,
+        );
+        const userYBefore = await getAccount(
+            provider.connection,
+            userYAccount.address,
+        );
+
+        // withdraw liquidity
+        await program.methods
+            .withdraw(lpToWithdraw, new anchor.BN(1), new anchor.BN(1))
+            .accounts({
+                user: user.publicKey,
+                config: configPda,
+                mintX: mintX,
+                mintY: mintY,
+                lpMint: lpMintPda, 
+                userX: userXAccount.address,
+                userY: userYAccount.address,
+                userLp: userLpAccount.address,
+                vaultX: vaultXPda,
+                vaultY: vaultYPda,
+                tokenProgram: TOKEN_PROGRAM_ID,
+            })
+            .signers([user])
+            .rpc();
+
+        // verify balances increased
+        const userXAfter = await getAccount(
+            provider.connection,
+            userXAccount.address,
+        );
+        const userYAfter = await getAccount(
+            provider.connection,
+            userYAccount.address,
+        );
+
+        expect(Number(userXAfter.amount)).to.be.greaterThan(
+            Number(userXBefore.amount)
+        );
+        expect(Number(userYAfter.amount)).to.be.greaterThan(
+            Number(userYBefore.amount)
+        );
+
+        console.log(
+            "Tokens X Withdrawn: ", Number(userXAfter.amount) - Number(userXBefore.amount)
+        );
+        console.log(
+            "Tokens Y withdrawn: ", Number(userYAfter.amount) - Number(userYBefore.amount)
+        );
+    });
+
+    it("Fails deposit with insufficient balance", async () => {
+        const amountX = new anchor.BN(2000000000); // More than user has
+        const amountY = new anchor.BN(200000000);
+        const minLp = new anchor.BN(1);
+    
+        const userXAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          mintX,
+          user.publicKey
+        );
+    
+        const userYAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          mintY,
+          user.publicKey
+        );
+    
+        const userLpAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          lpMintPda,
+          user.publicKey
+        );
+    
+        try {
+          await program.methods
+            .deposit(amountX, amountY, minLp)
+            .accounts({
+              user: user.publicKey,
+              config: configPda,
+              mintX: mintX,
+              mintY: mintY,
+              lpMint: lpMintPda,
+              userX: userXAccount.address,
+              userY: userYAccount.address,
+              userLp: userLpAccount.address,
+              vaultX: vaultXPda,
+              vaultY: vaultYPda,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+              systemProgram: SystemProgram.programId,
+            })
+            .signers([user])
+            .rpc();
+    
+          expect.fail("Should have failed with insufficient balance");
+        } catch (error) {
+          expect(error.message).to.include("InsufficientBalance");
+        }
+      });
+    
+      it("Fails withdraw with slippage exceeded", async () => {
+        // First deposit liquidity
+        const amountX = new anchor.BN(100000000);
+        const amountY = new anchor.BN(200000000);
+        const minLp = new anchor.BN(1);
+    
+        const userXAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          mintX,
+          user.publicKey
+        );
+    
+        const userYAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          mintY,
+          user.publicKey
+        );
+    
+        const userLpAccount = await getOrCreateAssociatedTokenAccount(
+          provider.connection,
+          user,
+          lpMintPda,
+          user.publicKey
+        );
+    
+        await program.methods
+          .deposit(amountX, amountY, minLp)
+          .accounts({
+            user: user.publicKey,
+            config: configPda,
+            mintX: mintX,
+            mintY: mintY,
+            lpMint: lpMintPda,
+            userX: userXAccount.address,
+            userY: userYAccount.address,
+            userLp: userLpAccount.address,
+            vaultX: vaultXPda,
+            vaultY: vaultYPda,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([user])
+          .rpc();
+    
+        const lpBalance = await getAccount(
+          provider.connection,
+          userLpAccount.address
+        );
+        const lpToWithdraw = new anchor.BN(Number(lpBalance.amount));
+    
+        try {
+          // Set unreasonably high minimum amounts
+          await program.methods
+            .withdraw(
+              lpToWithdraw,
+              new anchor.BN(1000000000), // Too high min X
+              new anchor.BN(1000000000) // Too high min Y
+            )
+            .accounts({
+              user: user.publicKey,
+              config: configPda,
+              mintX: mintX,
+              mintY: mintY,
+              lpMint: lpMintPda,
+              userX: userXAccount.address,
+              userY: userYAccount.address,
+              userLp: userLpAccount.address,
+              vaultX: vaultXPda,
+              vaultY: vaultYPda,
+              tokenProgram: TOKEN_PROGRAM_ID,
+            })
+            .signers([user])
+            .rpc();
+    
+          expect.fail("Should have failed with slippage exceeded");
+        } catch (error) {
+          expect(error.message).to.include("SlippageExceeded");
+        }
+      });
 });

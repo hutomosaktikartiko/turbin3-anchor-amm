@@ -27,4 +27,9 @@ pub mod amm {
     pub fn deposit(ctx: Context<Deposit>, amount_x: u64, amount_y: u64, min_lp: u64) -> Result<()> {
         instructions::deposit::deposit_handler(ctx, amount_x, amount_y, min_lp)
     }
+
+    /// Withdraw liquidity from the pool
+    pub fn withdraw(ctx: Context<Withdraw>, lp_amount: u64, min_x: u64, min_y: u64) -> Result<()> {
+        instructions::withdraw::withdraw_handler(ctx, lp_amount, min_x, min_y)
+    }
 }
