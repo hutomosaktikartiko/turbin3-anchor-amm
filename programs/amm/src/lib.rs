@@ -22,4 +22,9 @@ pub mod amm {
     pub fn initialize(ctx: Context<Initialize>, seed: u64, fee: u16) -> Result<()> {
         instructions::initialize::initialize_handler(ctx, seed, fee)
     }
+
+    /// Deposit liquidity to the pool
+    pub fn deposit(ctx: Context<Deposit>, amount_x: u64, amount_y: u64, min_lp: u64) -> Result<()> {
+        instructions::deposit::deposit_handler(ctx, amount_x, amount_y, min_lp)
+    }
 }
