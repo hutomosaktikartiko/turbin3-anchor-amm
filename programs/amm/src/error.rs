@@ -5,36 +5,50 @@ use constant_product_curve::CurveError;
 pub enum AmmError {
     #[msg("DefaultError")]
     DefaultError,
-    #[msg("Offer expired.")]
-    OfferExpired,
+
+    // Pool Management Errors
     #[msg("This pool is locked.")]
     PoolLocked,
-    #[msg("Slippage exceed.")]
-    SlippageExceeded,
-    #[msg("Overflow detected.")]
-    Overflow,
-    #[msg("Underflow detected.")]
-    Underflow,
-    #[msg("Invalid token.")]
-    InvalidToken,
-    #[msg("Actual liquidity is less than minimum")]
-    LiquidityLessThanMinimum,
     #[msg("No liquidity pool.")]
     NoLiquidityPool,
     #[msg("Bump error.")]
     BumpError,
-    #[msg("Curve Error.")]
-    CurveError,
-    #[msg("Fee is greater than 100%. This is not a very good deal.")]
-    InvalidFee,
-    #[msg("Invalid amount.")]
+
+    // Trading Errors
+    #[msg("Slippage tolerance exceed.")]
+    SlippageExceeded,
+    #[msg("Invalid token provided.")]
+    InvalidToken,
+    #[msg("Offer has expired.")]
+    OfferExpired,
+
+    // Math Errors
+    #[msg("Mathematical overflow detected.")]
+    Overflow,
+    #[msg("Mathematical underflow detected.")]
+    Underflow,
+    #[msg("Invalid amount provided.")]
     InvalidAmount,
-    #[msg("Invalid precision.")]
-    InvalidPrecision,
-    #[msg("Insufficient balance.")]
+
+    // Liquidity Errors
+    #[msg("Actual liquidity is less than minimum required.")]
+    LiquidityLessThanMinimum,
+    #[msg("Insufficient balance for operation.")]
     InsufficientBalance,
-    #[msg("Zero balance.")]
+    #[msg("Zero balance not allowed.")]
     ZeroBalance,
+
+    // Configuration Errors
+    #[msg("Fee exceeds maximum allowed.")]
+    InvalidFee,
+    #[msg("Invalid precision value.")]
+    InvalidPrecision,
+
+    // Authorization Errors
+    #[msg("Unauthorized access attempt")]
+    Unauthorized,
+    #[msg("No authority set for this pool")]
+    NoAuthority,
 }
 
 impl From<CurveError> for AmmError {
