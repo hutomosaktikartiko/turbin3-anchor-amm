@@ -1,9 +1,6 @@
 use crate::{constants::*, error::AmmError, state::Config};
 use anchor_lang::prelude::*;
-use anchor_spl::{
-    associated_token::AssociatedToken,
-    token::{self, Mint, MintTo, Token, TokenAccount, Transfer},
-};
+use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
@@ -88,7 +85,7 @@ pub struct Withdraw<'info> {
 
 impl<'info> Withdraw<'info> {
     /// Validate withdraw parameters
-    pub fn validate(&self, lp_amount: u64, min_x: u64, min_y: u64) -> Result<()> {
+    pub fn validate(&self, lp_amount: u64) -> Result<()> {
         // check lp amount is positive
         require!(lp_amount > 0, AmmError::InvalidAmount);
 
@@ -200,7 +197,7 @@ pub fn withdraw_handler(
     min_y: u64,
 ) -> Result<()> {
     // validate inputs
-    ctx.accounts.validate(lp_amount, min_x, min_y)?;
+    ctx.accounts.validate(lp_amount)?;
 
     let config_bump = ctx.accounts.config.config_bump;
 

@@ -32,4 +32,9 @@ pub mod amm {
     pub fn withdraw(ctx: Context<Withdraw>, lp_amount: u64, min_x: u64, min_y: u64) -> Result<()> {
         instructions::withdraw::withdraw_handler(ctx, lp_amount, min_x, min_y)
     }
+
+    /// Swap tokens using constant product curve
+    pub fn swap(ctx: Context<Swap>, is_x_to_y: bool, amount_in: u64, min_out: u64) -> Result<()> {
+        instructions::swap::swap_handler(ctx, is_x_to_y, amount_in, min_out)
+    }
 }
