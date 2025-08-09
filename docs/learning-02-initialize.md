@@ -586,4 +586,4 @@ solana-test-validator
 
 ---
 
-_Next: [Phase 3 - Liquidity Management](./learning-03-liquidity.md)_ 🚀
+_Next: [Phase 3 - Liquidity Management](./learning-03a-deposit.md)_ 🚀

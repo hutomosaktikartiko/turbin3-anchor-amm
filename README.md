@@ -154,46 +154,51 @@ erDiagram
 
 **File Detail**: [`learning-01-foundation.md`](./docs/learning-01-foundation.md)
 
-- [ ] **1.1** Setup project structure & dependencies
-- [ ] **1.2** Define constants dan seeds
-- [ ] **1.3** Create comprehensive error types
-- [ ] **1.4** Design state structures
+- Setup Anchor project dengan proper dependencies
+- Membuat constants dan PDA seeds untuk AMM
+- Implementasi comprehensive error handling
+- Design state structures untuk pool management
+- Testing environment setup
 
 ### 📍 Phase 2: Pool Initialization
 
 **File Detail**: [`learning-02-initialize.md`](./docs/learning-02-initialize.md)
 
-- [ ] **2.1** Create PDA untuk config account
-- [ ] **2.2** Setup LP mint dengan proper authority
-- [ ] **2.3** Initialize vault accounts
-- [ ] **2.4** Implement validation & access control
+- Membuat PDA (Program Derived Address) untuk config account
+- Setup LP mint dengan proper authority management
+- Initialize vault accounts untuk token storage
+- Implement validation logic dan access control
+- Cross-program invocation dengan SPL Token Program
+- Testing pool initialization flow
 
-### 📍 Phase 3: Liquidity Management
+### 📍 Phase 3a: Deposit Liquidity
 
-**File Detail**: [`learning-03-liquidity.md`](./docs/learning-03-liquidity.md)
+**File Detail**: [`learning-03a-deposit.md`](./docs/learning-03a-deposit.md)
 
-- [ ] **3.1** Implement deposit liquidity
-- [ ] **3.2** Calculate LP token amounts
-- [ ] **3.3** Handle first deposit vs subsequent
-- [ ] **3.4** Implement withdraw liquidity
+- Implementasi deposit liquidity dengan detailed context & validation
+- Perhitungan LP token untuk first deposit vs subsequent deposits
+- Integrasi CPI untuk transfer token dan mint LP
+- Proteksi slippage dan mathematical safety
+
+### 📍 Phase 3b: Withdraw Liquidity
+
+**File Detail**: [`learning-03b-withdraw.md`](./docs/learning-03b-withdraw.md)
+
+- Implementasi withdraw liquidity dengan context & validation
+- Perhitungan proportional withdrawal berdasarkan LP share
+- Integrasi CPI untuk burn LP dan transfer token dari vault
+- Proteksi slippage
 
 ### 📍 Phase 4: Token Swapping
 
-**File Detail**: `learning-04-swap.md`
+**File Detail**: [`learning-04-swap.md`](./docs/learning-04-swap.md)
 
-- [ ] **4.1** Implement constant product formula
-- [ ] **4.2** Calculate swap amounts with fees
-- [ ] **4.3** Add slippage protection
-- [ ] **4.4** Handle edge cases
-
-### 📍 Phase 5: Testing & Deployment
-
-**File Detail**: `learning-05-testing.md`
-
-- [ ] **5.1** Write comprehensive unit tests
-- [ ] **5.2** Integration testing dengan multiple users
-- [ ] **5.3** Deploy ke devnet & mainnet
-- [ ] **5.4** Security considerations
+- Implementasi constant product formula (x × y = k) untuk swap
+- Perhitungan jumlah output dengan fee (basis points)
+- Slippage protection menggunakan minimum output
+- Validasi input, akses, dan keamanan dasar
+- Cross-program invocations (CPI) untuk transfer token
+- Penulisan test end-to-end untuk operasi swap
 
 ---
 
